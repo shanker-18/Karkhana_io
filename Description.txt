@@ -1,0 +1,76 @@
+This project implements a Python script to model a Möbius strip using parametric equations, compute its surface area and edge length numerically, and visualize the 3D structure. The implementation is modular, clearly structured, and makes use of standard scientific libraries including NumPy, SciPy, and Matplotlib.
+
+Structure of the Code
+The code is built around a Python class named MobiusStrip, which encapsulates all the key components:
+
+ __init__(self, R, w, n)
+Initializes the strip with:
+
+R: Radius of the centerline.
+
+w: Width of the strip.
+
+n: Resolution (number of points along u and v).
+
+Uses numpy.linspace and meshgrid to create parameter grids for u ∈ [0, 2π] and v ∈ [−w/2, w/2].
+
+_generate_mesh(self)
+Implements the parametric equations of the Möbius strip:
+
+𝑥(𝑢,𝑣)=(𝑅+𝑣⋅cos⁡(𝑢2))⋅
+cos(𝑢)x(u,v)=(R+v⋅cos(u/2))⋅cos(u)𝑦(𝑢,𝑣)=(𝑅+𝑣⋅cos(𝑢/2))⋅
+sin(𝑢)y(u,v)=(R+v⋅cos(u/2))⋅sin(u)𝑧(𝑢,𝑣)=𝑣⋅sin(𝑢/2)
+z(u,v)=v⋅sin(u/2)
+
+Returns 3D coordinates (x, y, z) as arrays.
+
+surface_area(self)
+Computes surface area using numerical integration:
+
+Approximates partial derivatives 
+∂𝑥∂𝑢,∂𝑥∂𝑣,…∂u∂x , ∂v∂x
+ ,… using np.gradient.
+
+Calculates the magnitude of the cross product of tangent vectors at each grid point.
+
+Integrates over the surface using scipy.integrate.simpson.
+
+edge_length(self)
+Approximates total edge length by computing the arc lengths of both boundaries:
+
+Uses the outer edges at 
+𝑣=±𝑤/2
+v=±w/2 and computes distance between successive points using Euclidean norms.
+
+Sums the lengths of both edges.
+
+plot(self)
+Uses Matplotlib’s Axes3D to create a 3D surface plot of the Möbius strip.
+
+Provides labeled axes and an intuitive visual representation.
+
+Numerical Methods Used
+Surface Area:
+
+Double numerical integration using Simpson’s rule over a 2D grid.
+
+Vector calculus-based surface differential area is used:
+
+Area=∬∥∂𝑟⃗∂𝑢×∂𝑟⃗∂𝑣∥𝑑𝑢𝑑𝑣
+Area=∬∥ ∂u∂ r× ∂v∂r ∥dudv
+Edge Length:
+
+Approximated by summing the segment-wise Euclidean distances across the parameterized boundary curves.
+
+Challenges and Considerations
+Parametric complexity: The Möbius strip has a twist, which makes it topologically non-trivial. Care was needed in constructing a smooth and connected surface representation.
+
+Numerical stability: Finite-difference-based derivatives and numerical integration methods require careful handling of resolution (n) for accuracy.
+
+Visualization: Since the Möbius strip is a non-orientable surface, visual clarity was achieved by fine-tuning the mesh resolution and color mapping.
+
+Output
+The script prints the numerically computed surface area and edge length.
+
+A 3D surface plot visually confirms the Möbius strip geometry.
+
